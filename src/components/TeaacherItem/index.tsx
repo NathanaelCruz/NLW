@@ -3,26 +3,46 @@ import React from 'react'
 import WhatsAppIcon from '../../assets/images/icons/whatsapp.svg'
 
 import './style.css'
+import api from '../../services/api'
 
-function TeacherItem() {
+export interface Teacher {
+    avatar: string;
+    bio: string;
+    cost: number;
+    id: number;
+    name: string;
+    subject: string;
+    whatsapp: string;
+}
+
+interface TeacherItemProps{
+    teacher: Teacher;
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({teacher}) => {
+
+    function createNewConnection(){
+        api.post('connections', {
+            user_id: teacher.id
+        })
+    }
     return (
         <article className="teacher-item">
             <header>
-                <img src="https://media-exp1.licdn.com/dms/image/C4D03AQFURE5jTUF1AQ/profile-displayphoto-shrink_200_200/0?e=1602115200&v=beta&t=gOAZfY3XG4woTzY6eNPCYNDyuG1EltvQxGqQm7zkli4" alt="Nathanael Cruz"/>
+                <img src={teacher.avatar} alt={teacher.name}/>
                 <section>
-                    <strong>Nathanael Cruz</strong>
-                    <span>Desenvolvedor Web</span>
+                    <strong>{teacher.name}</strong>
+                    <span>{teacher.subject}</span>
                 </section>
             </header>
             <p>
-                Iniciei minha carreira profissional na área de telecomunicações, no qual colhi diversos conhecimentos, dentre eles análise de cenário e trabalho em equipe. <br /><br />
-                Durante esse período me identifiquei com a área de desenvolvimento web, passando pela mudança de back-end para front-end, no qual tenho maior afinidade ..
+                {teacher.bio}
             </p>
             <footer>
-                <p>Preço/hora <strong>R$ 80,00</strong></p>
-                <button type="button">
+                <p>Preço/hora <strong>R$ {teacher.cost}</strong></p>
+                <a href={`https://wa.me/${teacher.whatsapp}`} onClick={createNewConnection}>
                     <img src={WhatsAppIcon} alt="Entrar em contato"/>
-                </button>
+                </a>
             </footer>
         </article>
     )
