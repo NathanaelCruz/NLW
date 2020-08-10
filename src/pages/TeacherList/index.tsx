@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react'
+import React, { useState, FormEvent, useEffect } from 'react'
 import PageHeader from '../../components/PageHeader';
 import TeacherItem, {Teacher} from '../../components/TeaacherItem';
 import Input from '../../components/inputs';
@@ -12,6 +12,20 @@ function TeacherList(){
     const [subject, setSubject] = useState('')
     const [week_day, setWeekDay] = useState('')
     const [time, setTime] = useState('')
+
+
+    async function listTeachers() {
+
+        const list = await api.get('classes/list', {
+
+        })
+
+        setTeachers(list.data)
+    }
+
+    useEffect(() => {
+        listTeachers()
+    }, [])
 
     async function searchTeachers(e: FormEvent){
         e.preventDefault()
